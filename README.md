@@ -1,6 +1,8 @@
-# Sistema de Gestión Contable para PYMEs0 (Consola)
+# Sistema de Gestión Contable para PYMEs
 
 Este proyecto es una aplicación de consola en Java que implementa un sistema de gestión contable utilizando el patrón MVC. Permite la administración de clientes, proveedores, ingresos, gastos y la generación de reportes contables.
+
+**Versión de Java utilizada para el desarrollo:** 24.0.1
 
 ## Estructura del Proyecto
 
@@ -31,22 +33,6 @@ Este proyecto es una aplicación de consola en Java que implementa un sistema de
 ### 5. Reportes
 - Consultar historial de ingresos y gastos.
 - Generar reporte de balance por rango de fechas.
-
-## Uso
-
-1. Compila el proyecto:
-
-```sh
-javac -d bin src/**/*.java
-```
-
-2. Ejecuta la aplicación:
-
-```sh
-java -cp bin App
-```
-
-3. Navega por el menú principal y los submenús para operar sobre clientes, proveedores, ingresos, gastos y reportes.
 
 ## Notas
 - En esta versión, los datos se almacenan en memoria (listas) y se pierden al cerrar la aplicación.
