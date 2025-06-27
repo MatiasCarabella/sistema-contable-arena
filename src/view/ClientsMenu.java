@@ -26,7 +26,7 @@ public class ClientsMenu {
             System.out.println("0. Volver");
             op = InputUtils.readInt(scanner, "Seleccione una opción: ");
             switch (op) {
-                case 1 -> registerClient();
+                case 1 -> createClient();
                 case 2 -> updateClient();
                 case 3 -> deleteClient();
                 case 4 -> searchClient();
@@ -37,13 +37,13 @@ public class ClientsMenu {
         } while (op != 0);
     }
 
-    private void registerClient() {
+    private void createClient() {
         System.out.println("--- Registrar nuevo cliente ---");
         String name = InputUtils.readString(scanner, "Nombre: ");
         String cuit = InputUtils.readString(scanner, "CUIT: ");
         String address = InputUtils.readString(scanner, "Dirección: ");
         String phone = InputUtils.readString(scanner, "Teléfono: ");
-        Client c = clientController.registerClient(name, cuit, address, phone);
+        Client c = clientController.createClient(name, cuit, address, phone);
         System.out.println("Cliente registrado con ID: " + c.getId());
     }
 

@@ -5,42 +5,42 @@ import repository.SupplierRepository;
 import java.util.List;
 
 public class SupplierController {
-    private SupplierRepository supplierRepo;
+    private SupplierRepository supplierRepository;
 
-    public SupplierController(SupplierRepository repo) {
-        this.supplierRepo = repo;
+    public SupplierController(SupplierRepository repository) {
+        this.supplierRepository = repository;
     }
 
-    public Supplier registerSupplier(String name, String cuit, String address, String phone) {
+    public Supplier createSupplier(String name, String cuit, String address, String phone) {
         Supplier supplier = new Supplier(0, name, cuit, address, phone);
-        return supplierRepo.save(supplier);
+        return supplierRepository.create(supplier);
     }
 
     public Supplier updateSupplier(int id, String name, String cuit, String address, String phone) {
-        Supplier supplier = supplierRepo.findById(id);
+        Supplier supplier = supplierRepository.findById(id);
         if (supplier != null) {
             supplier.setName(name);
             supplier.setCuit(cuit);
             supplier.setAddress(address);
             supplier.setPhone(phone);
-            supplierRepo.save(supplier);
+            supplierRepository.update(supplier);
         }
         return supplier;
     }
 
     public void deleteSupplier(int id) {
-        supplierRepo.delete(id);
+        supplierRepository.delete(id);
     }
 
     public Supplier findSupplier(int id) {
-        return supplierRepo.findById(id);
+        return supplierRepository.findById(id);
     }
 
     public List<Supplier> listSuppliers() {
-        return supplierRepo.findAll();
+        return supplierRepository.findAll();
     }
 
     public List<Supplier> searchSuppliers(String name) {
-        return supplierRepo.searchByName(name);
+        return supplierRepository.searchByName(name);
     }
 }

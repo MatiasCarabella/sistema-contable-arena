@@ -3,6 +3,7 @@ package view;
 import controller.ClientController;
 import controller.SupplierController;
 import controller.ReportController;
+import controller.TransactionController;
 import repository.ClientRepository;
 import repository.SupplierRepository;
 import repository.TransactionRepository;
@@ -12,7 +13,7 @@ public class ConsoleMenu {
     private final ClientController clientController;
     private final SupplierController supplierController;
     private final ReportController reportController;
-    private final TransactionRepository transactionRepo;
+    private final TransactionController transactionController;
     private final Scanner scanner;
     private final ClientsMenu clientsMenu;
     private final SuppliersMenu suppliersMenu;
@@ -21,17 +22,18 @@ public class ConsoleMenu {
     private final ReportsMenu reportsMenu;
 
     public ConsoleMenu() {
-        ClientRepository clientRepo = new ClientRepository();
-        SupplierRepository supplierRepo = new SupplierRepository();
-        transactionRepo = new TransactionRepository();
-        clientController = new ClientController(clientRepo);
-        supplierController = new SupplierController(supplierRepo);
-        reportController = new ReportController(transactionRepo);
+        ClientRepository clientRepository = new ClientRepository();
+        SupplierRepository supplierRepository = new SupplierRepository();
+        TransactionRepository transactionRepository = new TransactionRepository();
+        clientController = new ClientController(clientRepository);
+        supplierController = new SupplierController(supplierRepository);
+        transactionController = new TransactionController(transactionRepository);
+        reportController = new ReportController(transactionRepository);
         scanner = new Scanner(System.in);
         clientsMenu = new ClientsMenu(clientController, scanner);
         suppliersMenu = new SuppliersMenu(supplierController, scanner);
-        incomesMenu = new IncomesMenu(reportController, transactionRepo, clientController, scanner);
-        expensesMenu = new ExpensesMenu(reportController, transactionRepo, supplierController, scanner);
+        incomesMenu = new IncomesMenu(reportController, transactionController, clientController, scanner);
+        expensesMenu = new ExpensesMenu(reportController, transactionController, supplierController, scanner);
         reportsMenu = new ReportsMenu(reportController, scanner);
     }
 

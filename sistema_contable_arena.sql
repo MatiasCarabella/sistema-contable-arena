@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS sistema_contable_arena;
+USE sistema_contable_arena;
 
 -- Creación de tablas
 CREATE TABLE clients (
@@ -76,8 +78,3 @@ SELECT
     (SELECT SUM(amount) FROM transactions t
      JOIN expenses e ON t.id = e.transaction_id
      WHERE t.date BETWEEN '2025-05-01' AND '2025-05-31') AS total_gastos;
-
--- Borrado de registros
-DELETE FROM transactions WHERE id = 1;
-DELETE FROM clients WHERE id = 1;
-DELETE FROM suppliers WHERE id = 1;

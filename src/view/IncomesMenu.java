@@ -2,21 +2,21 @@ package view;
 
 import controller.ReportController;
 import controller.ClientController;
+import controller.TransactionController;
 import model.Income;
-import repository.TransactionRepository;
 import java.util.List;
 import java.util.Scanner;
 import java.time.LocalDate;
 
 public class IncomesMenu {
     private final ReportController reportController;
-    private final TransactionRepository transactionRepo;
+    private final TransactionController transactionController;
     private final ClientController clientController;
     private final Scanner scanner;
 
-    public IncomesMenu(ReportController reportController, TransactionRepository transactionRepo, ClientController clientController, Scanner scanner) {
+    public IncomesMenu(ReportController reportController, TransactionController transactionController, ClientController clientController, Scanner scanner) {
         this.reportController = reportController;
-        this.transactionRepo = transactionRepo;
+        this.transactionController = transactionController;
         this.clientController = clientController;
         this.scanner = scanner;
     }
@@ -51,14 +51,14 @@ public class IncomesMenu {
         String desc = InputUtils.readString(scanner, "Descripción: ");
         LocalDate date = InputUtils.readDate(scanner, "Fecha (YYYY-MM-DD): ");
         Income income = new Income(0, date, amount, desc, clientId);
-        transactionRepo.save(income);
+        transactionController.createIncome(income);
         System.out.println("Ingreso registrado");
     }
 
     private void deleteIncome() {
         System.out.println("--- Eliminar ingreso ---");
         int id = InputUtils.readInt(scanner, "ID del ingreso: ");
-        transactionRepo.delete(id);
+        transactionController.deleteTransaction(id);
         System.out.println("Ingreso eliminado (si existía)");
     }
 

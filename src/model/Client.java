@@ -1,15 +1,11 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Client {
     private int id;
     private String name;
     private String cuit;
     private String address;
     private String phone;
-    private List<Income> incomes = new ArrayList<>();
 
     public Client(int id, String name, String cuit, String address, String phone) {
         this.id = id;
@@ -30,6 +26,4 @@ public class Client {
     public void setAddress(String address) { this.address = address; }
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
-    public List<Income> getIncomes() { return incomes; }
-    public void addIncome(Income income) { this.incomes.add(income); }
 }

@@ -43,7 +43,7 @@ public class SuppliersMenu {
         String cuit = InputUtils.readString(scanner, "CUIT: ");
         String address = InputUtils.readString(scanner, "Dirección: ");
         String phone = InputUtils.readString(scanner, "Teléfono: ");
-        Supplier s = supplierController.registerSupplier(name, cuit, address, phone);
+        Supplier s = supplierController.createSupplier(name, cuit, address, phone);
         System.out.println("Proveedor registrado con ID: " + s.getId());
     }
 

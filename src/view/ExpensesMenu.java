@@ -2,21 +2,21 @@ package view;
 
 import controller.ReportController;
 import controller.SupplierController;
+import controller.TransactionController;
 import model.Expense;
-import repository.TransactionRepository;
 import java.util.List;
 import java.util.Scanner;
 import java.time.LocalDate;
 
 public class ExpensesMenu {
     private final ReportController reportController;
-    private final TransactionRepository transactionRepo;
+    private final TransactionController transactionController;
     private final SupplierController supplierController;
     private final Scanner scanner;
 
-    public ExpensesMenu(ReportController reportController, TransactionRepository transactionRepo, SupplierController supplierController, Scanner scanner) {
+    public ExpensesMenu(ReportController reportController, TransactionController transactionController, SupplierController supplierController, Scanner scanner) {
         this.reportController = reportController;
-        this.transactionRepo = transactionRepo;
+        this.transactionController = transactionController;
         this.supplierController = supplierController;
         this.scanner = scanner;
     }
@@ -51,14 +51,14 @@ public class ExpensesMenu {
         String desc = InputUtils.readString(scanner, "Descripción: ");
         LocalDate date = InputUtils.readDate(scanner, "Fecha (YYYY-MM-DD): ");
         Expense expense = new Expense(0, date, amount, desc, supplierId);
-        transactionRepo.save(expense);
+        transactionController.createExpense(expense);
         System.out.println("Gasto registrado");
     }
 
     private void deleteExpense() {
         System.out.println("--- Eliminar gasto ---");
         int id = InputUtils.readInt(scanner, "ID del gasto: ");
-        transactionRepo.delete(id);
+        transactionController.deleteTransaction(id);
         System.out.println("Gasto eliminado (si existía)");
     }
 

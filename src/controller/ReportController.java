@@ -8,22 +8,22 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class ReportController {
-    private TransactionRepository transactionRepo;
+    private TransactionRepository transactionRepository;
 
-    public ReportController(TransactionRepository repo) {
-        this.transactionRepo = repo;
+    public ReportController(TransactionRepository repository) {
+        this.transactionRepository = repository;
     }
 
     public List<Income> getIncomesByClient(int clientId) {
-        return transactionRepo.findIncomesByClientId(clientId);
+        return transactionRepository.findIncomesByClientId(clientId);
     }
 
     public List<Expense> getExpensesBySupplier(int supplierId) {
-        return transactionRepo.findExpensesBySupplierId(supplierId);
+        return transactionRepository.findExpensesBySupplierId(supplierId);
     }
 
     public List<Transaction> getTransactionsBetween(LocalDate from, LocalDate to) {
-        return transactionRepo.findAll().stream()
+        return transactionRepository.findAll().stream()
             .filter(t -> !t.getDate().isBefore(from) && !t.getDate().isAfter(to))
             .toList();
     }

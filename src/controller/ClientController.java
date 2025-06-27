@@ -5,42 +5,42 @@ import repository.ClientRepository;
 import java.util.List;
 
 public class ClientController {
-    private ClientRepository clientRepo;
+    private ClientRepository clientRepository;
 
-    public ClientController(ClientRepository repo) {
-        this.clientRepo = repo;
+    public ClientController(ClientRepository repository) {
+        this.clientRepository = repository;
     }
 
-    public Client registerClient(String name, String cuit, String address, String phone) {
+    public Client createClient(String name, String cuit, String address, String phone) {
         Client client = new Client(0, name, cuit, address, phone);
-        return clientRepo.save(client);
+        return clientRepository.create(client);
     }
 
     public Client updateClient(int id, String name, String cuit, String address, String phone) {
-        Client client = clientRepo.findById(id);
+        Client client = clientRepository.findById(id);
         if (client != null) {
             client.setName(name);
             client.setCuit(cuit);
             client.setAddress(address);
             client.setPhone(phone);
-            clientRepo.save(client);
+            clientRepository.update(client);
         }
         return client;
     }
 
     public void deleteClient(int id) {
-        clientRepo.delete(id);
+        clientRepository.delete(id);
     }
 
     public Client findClient(int id) {
-        return clientRepo.findById(id);
+        return clientRepository.findById(id);
     }
 
     public List<Client> listClients() {
-        return clientRepo.findAll();
+        return clientRepository.findAll();
     }
 
     public List<Client> searchClients(String name) {
-        return clientRepo.searchByName(name);
+        return clientRepository.searchByName(name);
     }
 }
