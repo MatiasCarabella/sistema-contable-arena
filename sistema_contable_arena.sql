@@ -1,3 +1,4 @@
+-- Creación de la base de datos
 CREATE DATABASE IF NOT EXISTS sistema_contable_arena;
 USE sistema_contable_arena;
 
