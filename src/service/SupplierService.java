@@ -1,7 +1,6 @@
 package service;
 
 import exception.EntityNotFoundException;
-import exception.ValidationException;
 import java.util.List;
 import java.util.logging.Logger;
 import model.Supplier;
@@ -16,14 +15,12 @@ public class SupplierService {
   }
 
   public Supplier createSupplier(String name, String cuit, String address, String phone) {
-    validateSupplierData(name, cuit);
-    Supplier supplier = new Supplier(0, name, cuit, address, phone);
+    final Supplier supplier = new Supplier(0, name, cuit, address, phone);
     return supplierRepository.save(supplier);
   }
 
   public Supplier updateSupplier(int id, String name, String cuit, String address, String phone) {
-    validateSupplierData(name, cuit);
-    Supplier supplier =
+    final Supplier supplier =
         supplierRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Supplier not found with ID: " + id));
@@ -51,21 +48,6 @@ public class SupplierService {
   }
 
   public List<Supplier> searchSuppliers(String name) {
-    if (name == null || name.trim().isEmpty()) {
-      throw new ValidationException("Search name cannot be empty");
-    }
     return supplierRepository.searchByName(name);
-  }
-
-  private void validateSupplierData(String name, String cuit) {
-    if (name == null || name.trim().isEmpty()) {
-      throw new ValidationException("Supplier name cannot be empty");
-    }
-    if (cuit == null || cuit.trim().isEmpty()) {
-      throw new ValidationException("Supplier CUIT cannot be empty");
-    }
-    if (!cuit.matches("\\d{2}-\\d{8}-\\d")) {
-      throw new ValidationException("Invalid CUIT format. Expected: XX-XXXXXXXX-X");
-    }
   }
 }

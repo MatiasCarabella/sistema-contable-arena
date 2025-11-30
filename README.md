@@ -41,28 +41,32 @@ docker-compose up -d    # Start MySQL
 Clean layered architecture following **SOLID principles**:
 
 ```
-┌─────────────┐
-│    View     │  Interactive CLI with colors
-├─────────────┤
-│   Service   │  Business logic + validation
-├─────────────┤
-│ Repository  │  JDBC data access
-├─────────────┤
-│   MySQL     │  Persistent storage
-└─────────────┘
+┌──────────────┐
+│     View     │  Interactive CLI with colors
+├──────────────┤
+│  Controller  │  Input validation
+├──────────────┤
+│   Service    │  Business logic
+├──────────────┤
+│  Repository  │  JDBC data access
+├──────────────┤
+│    MySQL     │  Persistent storage
+└──────────────┘
 ```
 
 **Key Components:**
-- **Model** - Domain entities (Client, Supplier, Transaction)
-- **Service** - Business logic with validation
-- **Repository** - Data access with transactions
 - **View** - Colorful console interface
+- **Controller** - Input validation and request handling
+- **Service** - Business logic and entity coordination
+- **Repository** - Data access with transactions
+- **Model** - Domain entities (Client, Supplier, Transaction)
 
 ## Project Structure
 
 ```
 src/
 ├── config/      Database configuration
+├── controller/  Input validation
 ├── exception/   Custom exceptions
 ├── model/       Domain entities
 ├── repository/  Data access (JDBC)

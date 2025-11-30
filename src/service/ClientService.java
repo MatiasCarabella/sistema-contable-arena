@@ -1,7 +1,6 @@
 package service;
 
 import exception.EntityNotFoundException;
-import exception.ValidationException;
 import java.util.List;
 import java.util.logging.Logger;
 import model.Client;
@@ -16,13 +15,11 @@ public class ClientService {
   }
 
   public Client createClient(String name, String cuit, String address, String phone) {
-    validateClientData(name, cuit);
     final Client client = new Client(0, name, cuit, address, phone);
     return clientRepository.save(client);
   }
 
   public Client updateClient(int id, String name, String cuit, String address, String phone) {
-    validateClientData(name, cuit);
     final Client client =
         clientRepository
             .findById(id)
@@ -51,29 +48,6 @@ public class ClientService {
   }
 
   public List<Client> searchClients(String name) {
-    if (name == null || name.trim().isEmpty()) {
-      throw new ValidationException("Search name cannot be empty");
-    }
     return clientRepository.searchByName(name);
-  }
-
-  private void validateClientData(String name, String cuit) {
-    validateName(name, "Client");
-    validateCuit(cuit);
-  }
-
-  private void validateName(String name, String entityType) {
-    if (name == null || name.trim().isEmpty()) {
-      throw new ValidationException(entityType + " name cannot be empty");
-    }
-  }
-
-  private void validateCuit(String cuit) {
-    if (cuit == null || cuit.trim().isEmpty()) {
-      throw new ValidationException("CUIT cannot be empty");
-    }
-    if (!cuit.matches("\\d{2}-\\d{8}-\\d")) {
-      throw new ValidationException("Invalid CUIT format. Expected: XX-XXXXXXXX-X");
-    }
   }
 }

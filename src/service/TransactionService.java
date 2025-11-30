@@ -1,7 +1,6 @@
 package service;
 
 import exception.EntityNotFoundException;
-import exception.ValidationException;
 import java.util.List;
 import java.util.logging.Logger;
 import model.Expense;
@@ -27,8 +26,6 @@ public class TransactionService {
   }
 
   public Income createIncome(Income income) {
-    validateIncome(income);
-
     // Verify client exists
     clientRepository
         .findById(income.getClientId())
@@ -39,8 +36,6 @@ public class TransactionService {
   }
 
   public Expense createExpense(Expense expense) {
-    validateExpense(expense);
-
     // Verify supplier exists
     supplierRepository
         .findById(expense.getSupplierId())
@@ -65,31 +60,5 @@ public class TransactionService {
   public void deleteTransaction(int id) {
     transactionRepository.deleteById(id);
     LOGGER.info("Transaction deleted with ID: " + id);
-  }
-
-  private void validateIncome(Income income) {
-    if (income.getAmount() <= 0) {
-      throw new ValidationException("Income amount must be positive");
-    }
-    final String description = income.getDescription();
-    if (description == null || description.trim().isEmpty()) {
-      throw new ValidationException("Income description cannot be empty");
-    }
-    if (income.getDate() == null) {
-      throw new ValidationException("Income date cannot be null");
-    }
-  }
-
-  private void validateExpense(Expense expense) {
-    if (expense.getAmount() <= 0) {
-      throw new ValidationException("Expense amount must be positive");
-    }
-    final String description = expense.getDescription();
-    if (description == null || description.trim().isEmpty()) {
-      throw new ValidationException("Expense description cannot be empty");
-    }
-    if (expense.getDate() == null) {
-      throw new ValidationException("Expense date cannot be null");
-    }
   }
 }
