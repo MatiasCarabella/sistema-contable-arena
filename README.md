@@ -1,22 +1,25 @@
-
 <div align="center">
 
-# 💼 Accounting Management System
+# Accounting Management System
 
 ![Java](https://img.shields.io/badge/Java-25-orange?logo=openjdk&logoColor=white)
 ![Gradle](https://img.shields.io/badge/Gradle-9.2.1-02303A?logo=gradle&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-9.3.0-4479A1?logo=mysql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?logo=docker&logoColor=white)
 
-</div>
-
 **A professional console-based accounting system with colorful CLI, built with clean architecture and SOLID principles.**
 
-
+</div>
 
 ---
 
-## 🚀 Quick Start
+## Prerequisites
+
+- **Java 25** - [Download JDK](https://www.oracle.com/java/technologies/downloads/)
+- **Docker** - [Install Docker](https://docs.docker.com/get-docker/)
+- **Git** - [Install Git](https://git-scm.com/downloads)
+
+## Quick Start
 
 ```bash
 docker-compose up -d    # Start MySQL
@@ -25,17 +28,17 @@ docker-compose up -d    # Start MySQL
 
 > 💡 Database auto-initializes with sample data on first run.
 
-## ✨ Features
+## Features
 
 | Feature | Description |
 |---------|-------------|
-| 👥 **Clients** | Full CRUD operations with search |
-| 🏢 **Suppliers** | Manage supplier information |
-| 💰 **Income** | Track revenue by client |
-| 💸 **Expenses** | Record costs by supplier |
-| 📊 **Reports** | Financial summaries and balance sheets |
+| **Clients** | Full CRUD operations with search |
+| **Suppliers** | Manage supplier information |
+| **Income** | Track revenue by client |
+| **Expenses** | Record costs by supplier |
+| **Reports** | Financial summaries and balance sheets |
 
-## 🏗️ Architecture
+## Architecture
 
 Clean layered architecture following **SOLID principles**:
 
@@ -57,7 +60,7 @@ Clean layered architecture following **SOLID principles**:
 - **Repository** - Data access with transactions
 - **View** - Colorful console interface
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
@@ -69,7 +72,7 @@ src/
 └── view/        Console UI
 ```
 
-## 🛠️ Commands
+## Commands
 
 ```bash
 # Development
@@ -83,7 +86,7 @@ docker-compose down      # Stop MySQL
 docker logs accounting_mysql  # View logs
 ```
 
-
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
