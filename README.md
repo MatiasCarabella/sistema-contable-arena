@@ -1,57 +1,79 @@
 
-# Accounting Management System
-
 <div align="center">
+
+# 💼 Accounting Management System
 
 ![Java](https://img.shields.io/badge/Java-25-orange?logo=openjdk&logoColor=white)
 ![Gradle](https://img.shields.io/badge/Gradle-9.2.1-02303A?logo=gradle&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-9.3.0-4479A1?logo=mysql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?logo=docker&logoColor=white)
+
+**A professional console-based accounting system with colorful CLI, built with clean architecture and SOLID principles.**
+
+[Features](#-features) • [Quick Start](#-quick-start) • [Architecture](#-architecture) • [Commands](#-commands)
 
 </div>
 
-An interactive console-based Java application for managing accounting operations: clients, suppliers, income, expenses, and financial reports.
+---
 
-## Quick Start
+## 🚀 Quick Start
 
 ```bash
-# 1. Start MySQL database
-docker-compose up -d
-
-# 2. Run the application
-./gradlew run        # Unix/Linux/Mac
-gradlew.bat run      # Windows
-
-# 3. Stop database when done
-docker-compose down
+docker-compose up -d    # Start MySQL
+./gradlew run           # Run application
 ```
 
-That's it! The database initializes automatically with sample data on first run.
+> 💡 Database auto-initializes with sample data on first run.
 
-## Features
+## ✨ Features
 
-- **Client Management** - Create, update, delete, search clients
-- **Supplier Management** - Manage supplier information
-- **Income Tracking** - Record income associated with clients
-- **Expense Tracking** - Record expenses associated with suppliers
-- **Financial Reports** - Transaction history and balance reports by date range
+| Feature | Description |
+|---------|-------------|
+| 👥 **Clients** | Full CRUD operations with search |
+| 🏢 **Suppliers** | Manage supplier information |
+| 💰 **Income** | Track revenue by client |
+| 💸 **Expenses** | Record costs by supplier |
+| 📊 **Reports** | Financial summaries and balance sheets |
 
-## Architecture
+## 🏗️ Architecture
 
-Layered architecture following SOLID principles:
+Clean layered architecture following **SOLID principles**:
 
 ```
-View (Console UI) → Service (Business Logic) → Repository (Data Access) → MySQL Database
+┌─────────────┐
+│    View     │  Interactive CLI with colors
+├─────────────┤
+│   Service   │  Business logic + validation
+├─────────────┤
+│ Repository  │  JDBC data access
+├─────────────┤
+│   MySQL     │  Persistent storage
+└─────────────┘
 ```
 
-- **Model**: Domain entities (Client, Supplier, Transaction, Income, Expense)
-- **Service**: Business logic with validation
-- **Repository**: JDBC data access with proper transaction management
-- **View**: Interactive console menus
+**Key Components:**
+- **Model** - Domain entities (Client, Supplier, Transaction)
+- **Service** - Business logic with validation
+- **Repository** - Data access with transactions
+- **View** - Colorful console interface
 
-## Configuration
+## 🛠️ Commands
 
-The application uses environment variables for database configuration. Default values work with Docker setup:
+```bash
+# Development
+./gradlew run            # Run application
+./gradlew build          # Build project
+./gradlew spotlessApply  # Format code
+
+# Docker
+docker-compose up -d     # Start MySQL
+docker-compose down      # Stop MySQL
+docker logs accounting_mysql  # View logs
+```
+
+## ⚙️ Configuration
+
+Environment variables (defaults work with Docker):
 
 ```bash
 DB_HOST=localhost
@@ -61,44 +83,22 @@ DB_USER=root
 DB_PASSWORD=root
 ```
 
-## Gradle Commands
-
-```bash
-./gradlew build     # Build the project
-./gradlew run       # Run the application (quiet mode by default)
-./gradlew clean     # Clean build artifacts
-./gradlew jar       # Create executable JAR
-```
-
-## Manual Database Setup
-
-If not using Docker:
-
-```bash
-# Create database
-mysql -u root -p < init.sql
-
-# Set environment variables (see Configuration section)
-
-# Run application
-./gradlew run
-```
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 src/
-├── config/         # Database configuration
-├── exception/      # Custom exceptions
-├── model/          # Domain entities
-├── repository/     # Data access layer
-├── service/        # Business logic layer
-└── view/           # Console UI
+├── config/      Database configuration
+├── exception/   Custom exceptions
+├── model/       Domain entities
+├── repository/  Data access (JDBC)
+├── service/     Business logic
+└── view/        Console UI
 ```
 
-## Notes
+---
 
-- Database runs in Docker for consistency
-- Application runs locally for full interactivity
-- All operations include validation and error handling
-- Data persists in Docker volumes between runs
+<div align="center">
+
+**Built with ❤️ using Java 25, Gradle, and MySQL**
+
+</div>

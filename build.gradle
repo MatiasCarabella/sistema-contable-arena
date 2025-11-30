@@ -22,8 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation fileTree(dir: 'lib', include: ['*.jar'])
-    implementation 'mysql:mysql-connector-java:8.0.33'
+    implementation 'com.mysql:mysql-connector-j:9.3.0'
 }
 
 sourceSets {
