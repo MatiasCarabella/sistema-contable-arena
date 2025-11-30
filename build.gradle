@@ -1,14 +1,16 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.diffplug.spotless' version '8.1.0'
 }
 
 group = 'com.accounting'
 version = '2.0.0'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
 }
 
 application {
@@ -34,8 +36,25 @@ sourceSets {
 
 tasks.named('run') {
     standardInput = System.in
-    // Configure logging
-    systemProperty 'java.util.logging.config.file', 'src/logging.properties'
+}
+
+spotless {
+    java {
+        target 'src/**/*.java'
+        
+        // Use Google Java Format
+        googleJavaFormat('1.24.0')
+        
+        // Remove unused imports
+        removeUnusedImports()
+        
+        // Format other files
+        trimTrailingWhitespace()
+        endWithNewline()
+        
+        // Enforce formatting
+        toggleOffOn()
+    }
 }
 
 jar {
