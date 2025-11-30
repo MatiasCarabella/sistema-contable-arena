@@ -7,11 +7,9 @@
 ![MySQL](https://img.shields.io/badge/MySQL-9.3.0-4479A1?logo=mysql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?logo=docker&logoColor=white)
 
-**A professional console-based accounting system with colorful CLI, built with clean architecture and SOLID principles.**
-
 </div>
 
----
+**A professional console-based accounting system with colorful CLI, built with clean architecture and SOLID principles.**
 
 ## Prerequisites
 
