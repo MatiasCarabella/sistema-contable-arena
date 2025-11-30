@@ -8,11 +8,11 @@
 ![MySQL](https://img.shields.io/badge/MySQL-9.3.0-4479A1?logo=mysql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?logo=docker&logoColor=white)
 
+</div>
+
 **A professional console-based accounting system with colorful CLI, built with clean architecture and SOLID principles.**
 
-[Features](#-features) • [Quick Start](#-quick-start) • [Architecture](#-architecture) • [Commands](#-commands)
 
-</div>
 
 ---
 
@@ -57,6 +57,18 @@ Clean layered architecture following **SOLID principles**:
 - **Repository** - Data access with transactions
 - **View** - Colorful console interface
 
+## 📁 Project Structure
+
+```
+src/
+├── config/      Database configuration
+├── exception/   Custom exceptions
+├── model/       Domain entities
+├── repository/  Data access (JDBC)
+├── service/     Business logic
+└── view/        Console UI
+```
+
 ## 🛠️ Commands
 
 ```bash
@@ -71,34 +83,7 @@ docker-compose down      # Stop MySQL
 docker logs accounting_mysql  # View logs
 ```
 
-## ⚙️ Configuration
 
-Environment variables (defaults work with Docker):
+## 📄 License
 
-```bash
-DB_HOST=localhost
-DB_PORT=3306
-DB_NAME=accounting_system
-DB_USER=root
-DB_PASSWORD=root
-```
-
-## 📁 Project Structure
-
-```
-src/
-├── config/      Database configuration
-├── exception/   Custom exceptions
-├── model/       Domain entities
-├── repository/  Data access (JDBC)
-├── service/     Business logic
-└── view/        Console UI
-```
-
----
-
-<div align="center">
-
-**Built with ❤️ using Java 25, Gradle, and MySQL**
-
-</div>
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
