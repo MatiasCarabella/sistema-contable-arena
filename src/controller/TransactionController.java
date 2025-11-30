@@ -1,35 +1,39 @@
 package controller;
 
-import model.Income;
 import model.Expense;
+import model.Income;
 import model.Transaction;
-import repository.TransactionRepository;
+import service.TransactionService;
 import java.util.List;
 
+/**
+ * @deprecated Use {@link TransactionService} directly instead
+ */
+@Deprecated(since = "2.0", forRemoval = true)
 public class TransactionController {
-    private final TransactionRepository transactionRepository;
+    private final TransactionService transactionService;
 
-    public TransactionController(TransactionRepository repository) {
-        this.transactionRepository = repository;
+    public TransactionController(TransactionService transactionService) {
+        this.transactionService = transactionService;
     }
 
     public Income createIncome(Income income) {
-        return transactionRepository.createIncome(income);
+        return transactionService.createIncome(income);
     }
 
     public Expense createExpense(Expense expense) {
-        return transactionRepository.createExpense(expense);
+        return transactionService.createExpense(expense);
     }
 
     public Transaction findTransaction(int id) {
-        return transactionRepository.findById(id);
+        return transactionService.findTransaction(id);
     }
 
     public List<Transaction> listTransactions() {
-        return transactionRepository.findAll();
+        return transactionService.listTransactions();
     }
 
     public void deleteTransaction(int id) {
-        transactionRepository.delete(id);
+        transactionService.deleteTransaction(id);
     }
 }

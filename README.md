@@ -1,63 +1,104 @@
 
-# Sistema de Gestión Contable para PYMEs
+# Accounting Management System
 
-Este proyecto es una aplicación de consola en Java que implementa un sistema de gestión contable utilizando el patrón MVC y persistencia en MySQL mediante JDBC. Permite la administración de clientes, proveedores, ingresos, gastos y la generación de reportes contables.
+<div align="center">
 
-**Versión de Java utilizada:** 24.0.1
-**Base de datos:** MySQL 8+ (ver `sistema_contable_arena.sql` para el esquema y datos de prueba)
+![Java](https://img.shields.io/badge/Java-21-orange?style=for-the-badge&logo=openjdk&logoColor=white)
+![Gradle](https://img.shields.io/badge/Gradle-9.2.1-02303A?style=for-the-badge&logo=gradle&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-## Estructura del Proyecto
+</div>
 
-- **model/**: Clases de dominio (`Client`, `Supplier`, `Transaction`, `Income`, `Expense`).
-- **repository/**: Repositorios JDBC para acceso y persistencia en MySQL (`ClientRepository`, `SupplierRepository`, `TransactionRepository`).
-- **controller/**: Lógica de negocio y orquestación de operaciones para cada entidad (`ClientController`, `SupplierController`, `TransactionController`, `ReportController`).
-- **view/**: Menús interactivos por consola y utilidades de entrada (`ConsoleMenu`, `ClientsMenu`, `SuppliersMenu`, `IncomesMenu`, `ExpensesMenu`, `ReportsMenu`, `InputUtils`).
-- **util/**: Utilidades generales, incluyendo la gestión de la conexión JDBC (`DBConnection`).
-- **App.java**: Punto de entrada de la aplicación.
+An interactive console-based Java application for managing accounting operations: clients, suppliers, income, expenses, and financial reports.
 
-## Arquitectura y Persistencia
+## Quick Start
 
-El sistema sigue una arquitectura en capas (MVC):
+```bash
+# 1. Start MySQL database
+docker-compose up -d
 
-- **Modelo:** Representa las entidades del dominio.
-- **Repositorio:** Encapsula el acceso a datos usando JDBC y MySQL.
-- **Controlador:** Gestiona la lógica de negocio y coordina las operaciones entre vistas y repositorios.
-- **Vista:** Proporciona menús y entrada/salida por consola.
+# 2. Run the application
+./gradlew run        # Unix/Linux/Mac
+gradlew.bat run      # Windows
 
-La persistencia se realiza en una base de datos MySQL. El archivo `sistema_contable_arena.sql` contiene el esquema, relaciones y datos de prueba. La conexión se gestiona mediante la clase `DBConnection` y el driver JDBC de MySQL.
+# 3. Stop database when done
+docker-compose down
+```
 
-## Funcionalidades
+That's it! The database initializes automatically with sample data on first run.
 
-### 1. Gestión de Clientes
-- Registrar, actualizar, eliminar, buscar y listar clientes.
+## Features
 
-### 2. Gestión de Proveedores
-- Registrar, actualizar, eliminar, buscar y listar proveedores.
+- **Client Management** - Create, update, delete, search clients
+- **Supplier Management** - Manage supplier information
+- **Income Tracking** - Record income associated with clients
+- **Expense Tracking** - Record expenses associated with suppliers
+- **Financial Reports** - Transaction history and balance reports by date range
 
-### 3. Ingresos
-- Registrar ingresos asociados a clientes.
-- Eliminar ingresos.
-- Listar ingresos de un cliente.
+## Architecture
 
-### 4. Gastos
-- Registrar gastos asociados a proveedores.
-- Eliminar gastos.
-- Listar gastos de un proveedor.
+Layered architecture following SOLID principles:
 
-### 5. Reportes
-- Consultar historial de ingresos y gastos.
-- Generar reporte de balance por rango de fechas.
+```
+View (Console UI) → Service (Business Logic) → Repository (Data Access) → MySQL Database
+```
 
-## Instalación y Ejecución
+- **Model**: Domain entities (Client, Supplier, Transaction, Income, Expense)
+- **Service**: Business logic with validation
+- **Repository**: JDBC data access with proper transaction management
+- **View**: Interactive console menus
 
-1. **Configurar la base de datos MySQL:**
-   - Ejecutar el script `sistema_contable_arena.sql` para crear la base y poblarla con datos de prueba.
-2. **Configurar el driver JDBC:**
-   - Asegurarse de que `mysql-connector-j-9.3.0.jar` esté en la carpeta `lib/` y en el classpath.
-3. **Compilar y ejecutar:**
-   - Compilar los archivos `.java` de `src/` y ejecutar `App.java`.
+## Configuration
 
-## Notas
-- El sistema valida la existencia de clientes y proveedores antes de asociar ingresos o gastos.
-- La persistencia es permanente en MySQL.
-- El código está organizado en capas para facilitar el mantenimiento y futuras extensiones.
+The application uses environment variables for database configuration. Default values work with Docker setup:
+
+```bash
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=accounting_system
+DB_USER=root
+DB_PASSWORD=root
+```
+
+## Gradle Commands
+
+```bash
+./gradlew build     # Build the project
+./gradlew run       # Run the application (quiet mode by default)
+./gradlew clean     # Clean build artifacts
+./gradlew jar       # Create executable JAR
+```
+
+## Manual Database Setup
+
+If not using Docker:
+
+```bash
+# Create database
+mysql -u root -p < init.sql
+
+# Set environment variables (see Configuration section)
+
+# Run application
+./gradlew run
+```
+
+## Project Structure
+
+```
+src/
+├── config/         # Database configuration
+├── exception/      # Custom exceptions
+├── model/          # Domain entities
+├── repository/     # Data access layer
+├── service/        # Business logic layer
+└── view/           # Console UI
+```
+
+## Notes
+
+- Database runs in Docker for consistency
+- Application runs locally for full interactivity
+- All operations include validation and error handling
+- Data persists in Docker volumes between runs

@@ -1,0 +1,11 @@
+.git
+.gitignore
+*.md
+bin/
+.vscode/
+.idea/
+*.iml
+target/
+docker-compose.yml
+Dockerfile
+sistema_contable_arena.sql

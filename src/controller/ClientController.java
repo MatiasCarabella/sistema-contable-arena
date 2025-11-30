@@ -1,46 +1,41 @@
 package controller;
 
 import model.Client;
-import repository.ClientRepository;
+import service.ClientService;
 import java.util.List;
 
+/**
+ * @deprecated Use {@link ClientService} directly instead
+ */
+@Deprecated(since = "2.0", forRemoval = true)
 public class ClientController {
-    private ClientRepository clientRepository;
+    private final ClientService clientService;
 
-    public ClientController(ClientRepository repository) {
-        this.clientRepository = repository;
+    public ClientController(ClientService clientService) {
+        this.clientService = clientService;
     }
 
     public Client createClient(String name, String cuit, String address, String phone) {
-        Client client = new Client(0, name, cuit, address, phone);
-        return clientRepository.create(client);
+        return clientService.createClient(name, cuit, address, phone);
     }
 
     public Client updateClient(int id, String name, String cuit, String address, String phone) {
-        Client client = clientRepository.findById(id);
-        if (client != null) {
-            client.setName(name);
-            client.setCuit(cuit);
-            client.setAddress(address);
-            client.setPhone(phone);
-            clientRepository.update(client);
-        }
-        return client;
+        return clientService.updateClient(id, name, cuit, address, phone);
     }
 
     public void deleteClient(int id) {
-        clientRepository.delete(id);
+        clientService.deleteClient(id);
     }
 
     public Client findClient(int id) {
-        return clientRepository.findById(id);
+        return clientService.findClient(id);
     }
 
     public List<Client> listClients() {
-        return clientRepository.findAll();
+        return clientService.listClients();
     }
 
     public List<Client> searchClients(String name) {
-        return clientRepository.searchByName(name);
+        return clientService.searchClients(name);
     }
 }

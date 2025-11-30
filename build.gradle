@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.accounting'
+version = '2.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+application {
+    mainClass = 'App'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation fileTree(dir: 'lib', include: ['*.jar'])
+    implementation 'mysql:mysql-connector-java:8.0.33'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+}
+
+tasks.named('run') {
+    standardInput = System.in
+    // Configure logging
+    systemProperty 'java.util.logging.config.file', 'src/logging.properties'
+}
+
+jar {
+    manifest {
+        attributes(
+            'Main-Class': 'App'
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

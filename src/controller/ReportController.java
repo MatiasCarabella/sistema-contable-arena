@@ -1,30 +1,32 @@
 package controller;
 
-import model.Income;
 import model.Expense;
+import model.Income;
 import model.Transaction;
-import repository.TransactionRepository;
+import service.ReportService;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * @deprecated Use {@link ReportService} directly instead
+ */
+@Deprecated(since = "2.0", forRemoval = true)
 public class ReportController {
-    private TransactionRepository transactionRepository;
+    private final ReportService reportService;
 
-    public ReportController(TransactionRepository repository) {
-        this.transactionRepository = repository;
+    public ReportController(ReportService reportService) {
+        this.reportService = reportService;
     }
 
     public List<Income> getIncomesByClient(int clientId) {
-        return transactionRepository.findIncomesByClientId(clientId);
+        return reportService.getIncomesByClient(clientId);
     }
 
     public List<Expense> getExpensesBySupplier(int supplierId) {
-        return transactionRepository.findExpensesBySupplierId(supplierId);
+        return reportService.getExpensesBySupplier(supplierId);
     }
 
     public List<Transaction> getTransactionsBetween(LocalDate from, LocalDate to) {
-        return transactionRepository.findAll().stream()
-            .filter(t -> !t.getDate().isBefore(from) && !t.getDate().isAfter(to))
-            .toList();
+        return reportService.getTransactionsBetween(from, to);
     }
 }

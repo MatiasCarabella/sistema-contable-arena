@@ -1,15 +1,19 @@
 package util;
 
+import config.DatabaseConfig;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * @deprecated Use {@link DatabaseConfig#getConnection()} instead
+ */
+@Deprecated(since = "2.0", forRemoval = true)
 public class DBConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/sistema_contable_arena?useSSL=false&serverTimezone=UTC";
-    private static final String USER = "root";
-    private static final String PASSWORD = "root";
+    private DBConnection() {
+        throw new UnsupportedOperationException("Utility class");
+    }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+        return DatabaseConfig.getConnection();
     }
 }

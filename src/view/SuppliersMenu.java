@@ -1,85 +1,105 @@
 package view;
 
-import controller.SupplierController;
+import exception.EntityNotFoundException;
+import exception.ValidationException;
 import model.Supplier;
+import service.SupplierService;
 import java.util.List;
 import java.util.Scanner;
 
 public class SuppliersMenu {
-    private final SupplierController supplierController;
+    private final SupplierService supplierService;
     private final Scanner scanner;
 
-    public SuppliersMenu(SupplierController supplierController, Scanner scanner) {
-        this.supplierController = supplierController;
+    public SuppliersMenu(SupplierService supplierService, Scanner scanner) {
+        this.supplierService = supplierService;
         this.scanner = scanner;
     }
 
-    public void mostrar() {
-        int op;
+    public void show() {
+        int option;
         do {
-            System.out.println("\n--- Gestión de Proveedores ---");
-            System.out.println("1. Registrar nuevo proveedor");
-            System.out.println("2. Actualizar proveedor");
-            System.out.println("3. Eliminar proveedor");
-            System.out.println("4. Buscar proveedor");
-            System.out.println("5. Listar todos los proveedores");
-            System.out.println("0. Volver");
-            op = InputUtils.readInt(scanner, "Seleccione una opción: ");
-            switch (op) {
-                case 1 -> registerSupplier();
-                case 2 -> updateSupplier();
-                case 3 -> deleteSupplier();
-                case 4 -> searchSupplier();
-                case 5 -> listSuppliers();
-                case 0 -> {}
-                default -> System.out.println("Opción inválida");
+            System.out.println("\n--- Supplier Management ---");
+            System.out.println("1. Register new supplier");
+            System.out.println("2. Update supplier");
+            System.out.println("3. Delete supplier");
+            System.out.println("4. Search supplier");
+            System.out.println("5. List all suppliers");
+            System.out.println("0. Back");
+            option = InputUtils.readInt(scanner, "Select an option: ");
+            try {
+                switch (option) {
+                    case 1 -> registerSupplier();
+                    case 2 -> updateSupplier();
+                    case 3 -> deleteSupplier();
+                    case 4 -> searchSupplier();
+                    case 5 -> listSuppliers();
+                    case 0 -> {}
+                    default -> System.out.println("Invalid option");
+                }
+            } catch (ValidationException | EntityNotFoundException e) {
+                System.out.println("Error: " + e.getMessage());
             }
-        } while (op != 0);
+        } while (option != 0);
     }
 
     private void registerSupplier() {
-        System.out.println("--- Registrar nuevo proveedor ---");
-        String name = InputUtils.readString(scanner, "Nombre: ");
-        String cuit = InputUtils.readString(scanner, "CUIT: ");
-        String address = InputUtils.readString(scanner, "Dirección: ");
-        String phone = InputUtils.readString(scanner, "Teléfono: ");
-        Supplier s = supplierController.createSupplier(name, cuit, address, phone);
-        System.out.println("Proveedor registrado con ID: " + s.getId());
+        System.out.println("--- Register New Supplier ---");
+        String name = InputUtils.readString(scanner, "Name: ");
+        String cuit = InputUtils.readString(scanner, "CUIT (XX-XXXXXXXX-X): ");
+        String address = InputUtils.readString(scanner, "Address: ");
+        String phone = InputUtils.readString(scanner, "Phone: ");
+        Supplier supplier = supplierService.createSupplier(name, cuit, address, phone);
+        System.out.println("Supplier registered with ID: " + supplier.getId());
+        InputUtils.pressAnyKeyToContinue(scanner);
     }
 
     private void updateSupplier() {
-        System.out.println("--- Actualizar proveedor ---");
-        int id = InputUtils.readInt(scanner, "ID del proveedor: ");
-        String name = InputUtils.readString(scanner, "Nuevo nombre: ");
-        String cuit = InputUtils.readString(scanner, "Nuevo CUIT: ");
-        String address = InputUtils.readString(scanner, "Nueva dirección: ");
-        String phone = InputUtils.readString(scanner, "Nuevo teléfono: ");
-        Supplier s = supplierController.updateSupplier(id, name, cuit, address, phone);
-        if (s != null) System.out.println("Proveedor actualizado");
-        else System.out.println("Proveedor no encontrado");
+        System.out.println("--- Update Supplier ---");
+        int id = InputUtils.readInt(scanner, "Supplier ID: ");
+        String name = InputUtils.readString(scanner, "New name: ");
+        String cuit = InputUtils.readString(scanner, "New CUIT: ");
+        String address = InputUtils.readString(scanner, "New address: ");
+        String phone = InputUtils.readString(scanner, "New phone: ");
+        Supplier supplier = supplierService.updateSupplier(id, name, cuit, address, phone);
+        System.out.println("Supplier updated successfully");
+        InputUtils.pressAnyKeyToContinue(scanner);
     }
 
     private void deleteSupplier() {
-        System.out.println("--- Eliminar proveedor ---");
-        int id = InputUtils.readInt(scanner, "ID del proveedor: ");
-        supplierController.deleteSupplier(id);
-        System.out.println("Proveedor eliminado (si existía)");
+        System.out.println("--- Delete Supplier ---");
+        int id = InputUtils.readInt(scanner, "Supplier ID: ");
+        supplierService.deleteSupplier(id);
+        System.out.println("Supplier deleted successfully");
+        InputUtils.pressAnyKeyToContinue(scanner);
     }
 
     private void searchSupplier() {
-        System.out.println("--- Buscar proveedor ---");
-        String name = InputUtils.readString(scanner, "Nombre a buscar: ");
-        List<Supplier> found = supplierController.searchSuppliers(name);
-        for (Supplier s : found) {
-            System.out.println(s.getId() + ": " + s.getName() + " | CUIT: " + s.getCuit());
+        System.out.println("--- Search Supplier ---");
+        String name = InputUtils.readString(scanner, "Name to search: ");
+        List<Supplier> found = supplierService.searchSuppliers(name);
+        if (found.isEmpty()) {
+            System.out.println("No suppliers found");
+        } else {
+            for (Supplier s : found) {
+                System.out.printf("%d: %s | CUIT: %s | Phone: %s%n", 
+                    s.getId(), s.getName(), s.getCuit(), s.getPhone());
+            }
         }
-        if (found.isEmpty()) System.out.println("No se encontraron proveedores");
+        InputUtils.pressAnyKeyToContinue(scanner);
     }
 
     private void listSuppliers() {
-        System.out.println("--- Lista de proveedores ---");
-        for (Supplier s : supplierController.listSuppliers()) {
-            System.out.println(s.getId() + ": " + s.getName() + " | CUIT: " + s.getCuit());
+        System.out.println("--- Supplier List ---");
+        List<Supplier> suppliers = supplierService.listSuppliers();
+        if (suppliers.isEmpty()) {
+            System.out.println("No suppliers registered");
+        } else {
+            for (Supplier s : suppliers) {
+                System.out.printf("%d: %s | CUIT: %s | Phone: %s%n", 
+                    s.getId(), s.getName(), s.getCuit(), s.getPhone());
+            }
         }
+        InputUtils.pressAnyKeyToContinue(scanner);
     }
 }

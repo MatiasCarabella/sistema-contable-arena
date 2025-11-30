@@ -1,85 +1,109 @@
 package view;
 
-import controller.ClientController;
+import exception.EntityNotFoundException;
+import exception.ValidationException;
 import model.Client;
+import service.ClientService;
 import java.util.List;
 import java.util.Scanner;
 
 public class ClientsMenu {
-    private final ClientController clientController;
+    private final ClientService clientService;
     private final Scanner scanner;
 
-    public ClientsMenu(ClientController clientController, Scanner scanner) {
-        this.clientController = clientController;
+    public ClientsMenu(ClientService clientService, Scanner scanner) {
+        this.clientService = clientService;
         this.scanner = scanner;
     }
 
-    public void mostrar() {
-        int op;
+    public void show() {
+        int option;
         do {
-            System.out.println("\n--- Gestión de Clientes ---");
-            System.out.println("1. Registrar nuevo cliente");
-            System.out.println("2. Actualizar cliente");
-            System.out.println("3. Eliminar cliente");
-            System.out.println("4. Buscar cliente");
-            System.out.println("5. Listar todos los clientes");
-            System.out.println("0. Volver");
-            op = InputUtils.readInt(scanner, "Seleccione una opción: ");
-            switch (op) {
-                case 1 -> createClient();
-                case 2 -> updateClient();
-                case 3 -> deleteClient();
-                case 4 -> searchClient();
-                case 5 -> listClients();
-                case 0 -> {}
-                default -> System.out.println("Opción inválida");
+            System.out.println("\n" + ConsoleColors.title("+-----------------------------+"));
+            System.out.println(ConsoleColors.title("|   ") + ConsoleColors.BOLD_WHITE + "CLIENT MANAGEMENT" + ConsoleColors.title("      |"));
+            System.out.println(ConsoleColors.title("+-----------------------------+"));
+            System.out.println(ConsoleColors.BLUE + "1." + ConsoleColors.RESET + " Register new client");
+            System.out.println(ConsoleColors.BLUE + "2." + ConsoleColors.RESET + " Update client");
+            System.out.println(ConsoleColors.BLUE + "3." + ConsoleColors.RESET + " Delete client");
+            System.out.println(ConsoleColors.BLUE + "4." + ConsoleColors.RESET + " Search client");
+            System.out.println(ConsoleColors.BLUE + "5." + ConsoleColors.RESET + " List all clients");
+            System.out.println(ConsoleColors.RED + "0." + ConsoleColors.RESET + " Back");
+            option = InputUtils.readInt(scanner, ConsoleColors.CYAN + "\nSelect an option: " + ConsoleColors.RESET);
+            try {
+                switch (option) {
+                    case 1 -> createClient();
+                    case 2 -> updateClient();
+                    case 3 -> deleteClient();
+                    case 4 -> searchClient();
+                    case 5 -> listClients();
+                    case 0 -> {}
+                    default -> System.out.println(ConsoleColors.warning("[!] Invalid option"));
+                }
+            } catch (ValidationException | EntityNotFoundException e) {
+                System.out.println(ConsoleColors.error("[ERROR] " + e.getMessage()));
             }
-        } while (op != 0);
+        } while (option != 0);
     }
 
     private void createClient() {
-        System.out.println("--- Registrar nuevo cliente ---");
-        String name = InputUtils.readString(scanner, "Nombre: ");
-        String cuit = InputUtils.readString(scanner, "CUIT: ");
-        String address = InputUtils.readString(scanner, "Dirección: ");
-        String phone = InputUtils.readString(scanner, "Teléfono: ");
-        Client c = clientController.createClient(name, cuit, address, phone);
-        System.out.println("Cliente registrado con ID: " + c.getId());
+        System.out.println("\n" + ConsoleColors.info("=== Register New Client ==="));
+        String name = InputUtils.readString(scanner, "Name: ");
+        String cuit = InputUtils.readString(scanner, "CUIT (XX-XXXXXXXX-X): ");
+        String address = InputUtils.readString(scanner, "Address: ");
+        String phone = InputUtils.readString(scanner, "Phone: ");
+        Client client = clientService.createClient(name, cuit, address, phone);
+        System.out.println(ConsoleColors.success("\n[OK] Client registered with ID: " + client.getId()));
+        InputUtils.pressAnyKeyToContinue(scanner);
     }
 
     private void updateClient() {
-        System.out.println("--- Actualizar cliente ---");
-        int id = InputUtils.readInt(scanner, "ID del cliente: ");
-        String name = InputUtils.readString(scanner, "Nuevo nombre: ");
-        String cuit = InputUtils.readString(scanner, "Nuevo CUIT: ");
-        String address = InputUtils.readString(scanner, "Nueva dirección: ");
-        String phone = InputUtils.readString(scanner, "Nuevo teléfono: ");
-        Client c = clientController.updateClient(id, name, cuit, address, phone);
-        if (c != null) System.out.println("Cliente actualizado");
-        else System.out.println("Cliente no encontrado");
+        System.out.println("\n" + ConsoleColors.info("=== Update Client ==="));
+        int id = InputUtils.readInt(scanner, "Client ID: ");
+        String name = InputUtils.readString(scanner, "New name: ");
+        String cuit = InputUtils.readString(scanner, "New CUIT: ");
+        String address = InputUtils.readString(scanner, "New address: ");
+        String phone = InputUtils.readString(scanner, "New phone: ");
+        Client client = clientService.updateClient(id, name, cuit, address, phone);
+        System.out.println(ConsoleColors.success("\n[OK] Client updated successfully"));
+        InputUtils.pressAnyKeyToContinue(scanner);
     }
 
     private void deleteClient() {
-        System.out.println("--- Eliminar cliente ---");
-        int id = InputUtils.readInt(scanner, "ID del cliente: ");
-        clientController.deleteClient(id);
-        System.out.println("Cliente eliminado (si existía)");
+        System.out.println("\n" + ConsoleColors.info("=== Delete Client ==="));
+        int id = InputUtils.readInt(scanner, "Client ID: ");
+        clientService.deleteClient(id);
+        System.out.println(ConsoleColors.success("\n[OK] Client deleted successfully"));
+        InputUtils.pressAnyKeyToContinue(scanner);
     }
 
     private void searchClient() {
-        System.out.println("--- Buscar cliente ---");
-        String name = InputUtils.readString(scanner, "Nombre a buscar: ");
-        List<Client> found = clientController.searchClients(name);
-        for (Client c : found) {
-            System.out.println(c.getId() + ": " + c.getName() + " | CUIT: " + c.getCuit());
+        System.out.println("\n" + ConsoleColors.info("=== Search Client ==="));
+        String name = InputUtils.readString(scanner, "Name to search: ");
+        List<Client> found = clientService.searchClients(name);
+        if (found.isEmpty()) {
+            System.out.println(ConsoleColors.warning("\n[!] No clients found"));
+        } else {
+            System.out.println(ConsoleColors.BOLD_GREEN + "\nFound " + found.size() + " client(s):" + ConsoleColors.RESET);
+            for (Client c : found) {
+                System.out.printf(ConsoleColors.BOLD_BLUE + "ID %d:" + ConsoleColors.RESET + " %s | CUIT: %s | Phone: %s%n", 
+                    c.getId(), c.getName(), c.getCuit(), c.getPhone());
+            }
         }
-        if (found.isEmpty()) System.out.println("No se encontraron clientes");
+        InputUtils.pressAnyKeyToContinue(scanner);
     }
 
     private void listClients() {
-        System.out.println("--- Lista de clientes ---");
-        for (Client c : clientController.listClients()) {
-            System.out.println(c.getId() + ": " + c.getName() + " | CUIT: " + c.getCuit());
+        System.out.println("\n" + ConsoleColors.info("=== Client List ==="));
+        List<Client> clients = clientService.listClients();
+        if (clients.isEmpty()) {
+            System.out.println(ConsoleColors.warning("\n[!] No clients registered"));
+        } else {
+            System.out.println(ConsoleColors.BOLD_GREEN + "\nTotal clients: " + clients.size() + ConsoleColors.RESET);
+            for (Client c : clients) {
+                System.out.printf(ConsoleColors.BOLD_BLUE + "ID %d:" + ConsoleColors.RESET + " %s | CUIT: %s | Phone: %s%n", 
+                    c.getId(), c.getName(), c.getCuit(), c.getPhone());
+            }
         }
+        InputUtils.pressAnyKeyToContinue(scanner);
     }
 }

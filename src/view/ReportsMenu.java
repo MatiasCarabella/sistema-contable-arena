@@ -1,57 +1,76 @@
 package view;
 
-import controller.ReportController;
 import model.Transaction;
+import service.ReportService;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
-import java.time.LocalDate;
 
 public class ReportsMenu {
-    private final ReportController reportController;
+    private final ReportService reportService;
     private final Scanner scanner;
 
-    public ReportsMenu(ReportController reportController, Scanner scanner) {
-        this.reportController = reportController;
+    public ReportsMenu(ReportService reportService, Scanner scanner) {
+        this.reportService = reportService;
         this.scanner = scanner;
     }
 
-    public void mostrar() {
-        int op;
+    public void show() {
+        int option;
         do {
-            System.out.println("\n--- Reportes ---");
-            System.out.println("1. Consultar historial de ingresos y gastos");
-            System.out.println("2. Generar reporte de balance por rango de fechas");
-            System.out.println("0. Volver");
-            op = InputUtils.readInt(scanner, "Seleccione una opción: ");
-            switch (op) {
+            System.out.println("\n--- Reports ---");
+            System.out.println("1. View transaction history (income and expenses)");
+            System.out.println("2. Generate balance report by date range");
+            System.out.println("0. Back");
+            option = InputUtils.readInt(scanner, "Select an option: ");
+            switch (option) {
                 case 1 -> listAllTransactions();
                 case 2 -> generateBalanceReport();
                 case 0 -> {}
-                default -> System.out.println("Opción inválida");
+                default -> System.out.println("Invalid option");
             }
-        } while (op != 0);
+        } while (option != 0);
     }
 
     private void listAllTransactions() {
-        System.out.println("--- Historial de ingresos y gastos ---");
-        for (Transaction t : reportController.getTransactionsBetween(LocalDate.MIN, LocalDate.MAX)) {
-            String tipo = t.getClass().getSimpleName();
-            System.out.println(t.getId() + ": [" + tipo + "] $" + t.getAmount() + " | " + t.getDescription() + " | " + t.getDate());
+        System.out.println("--- Transaction History (Income and Expenses) ---");
+        List<Transaction> transactions = reportService.getTransactionsBetween(LocalDate.MIN, LocalDate.MAX);
+        
+        if (transactions.isEmpty()) {
+            System.out.println("No transactions found");
+        } else {
+            for (Transaction t : transactions) {
+                String type = t.getClass().getSimpleName();
+                System.out.printf("ID: %d | [%s] | Amount: $%.2f | %s | Date: %s%n",
+                    t.getId(), type, t.getAmount(), t.getDescription(), t.getDate());
+            }
         }
+        InputUtils.pressAnyKeyToContinue(scanner);
     }
 
     private void generateBalanceReport() {
-        System.out.println("--- Reporte de balance por rango de fechas ---");
-        LocalDate from = InputUtils.readDate(scanner, "Desde (YYYY-MM-DD): ");
-        LocalDate to = InputUtils.readDate(scanner, "Hasta (YYYY-MM-DD): ");
-        List<Transaction> txs = reportController.getTransactionsBetween(from, to);
-        double ingresos = 0, egresos = 0;
-        for (Transaction t : txs) {
-            if (t.getClass().getSimpleName().equals("Income")) ingresos += t.getAmount();
-            if (t.getClass().getSimpleName().equals("Expense")) egresos += t.getAmount();
+        System.out.println("--- Balance Report by Date Range ---");
+        LocalDate from = InputUtils.readDate(scanner, "From (YYYY-MM-DD): ");
+        LocalDate to = InputUtils.readDate(scanner, "To (YYYY-MM-DD): ");
+        
+        double totalIncome = reportService.calculateTotalIncome(from, to);
+        double totalExpense = reportService.calculateTotalExpense(from, to);
+        double balance = reportService.calculateBalance(from, to);
+        
+        System.out.println("\n=== Balance Report ===");
+        System.out.printf("Period: %s to %s%n", from, to);
+        System.out.printf("Total Income:  $%.2f%n", totalIncome);
+        System.out.printf("Total Expense: $%.2f%n", totalExpense);
+        System.out.println("----------------------");
+        System.out.printf("Balance:       $%.2f%n", balance);
+        
+        if (balance > 0) {
+            System.out.println("Status: Positive balance");
+        } else if (balance < 0) {
+            System.out.println("Status: Negative balance");
+        } else {
+            System.out.println("Status: Balanced");
         }
-        System.out.println("Ingresos: $" + ingresos);
-        System.out.println("Egresos: $" + egresos);
-        System.out.println("Balance: $" + (ingresos - egresos));
+        InputUtils.pressAnyKeyToContinue(scanner);
     }
 }
